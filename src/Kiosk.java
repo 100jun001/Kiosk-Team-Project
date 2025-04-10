@@ -1,8 +1,12 @@
 public class Kiosk {
     //데이터 관리
     //주석 꼭 붙여주세요
+    private final List<MenuItem> menuItems; // MenuItem으로부터 리스트를 가져온다.
 
-    start() {
+    public Kiosk(List<MenuItem> menuItems) {
+        this.MenuItem = menuItems
+    }
+    {
         // 스캐너 선언
         // 반복문 시작
 
