@@ -2,8 +2,8 @@ import java.awt.*;
 import java.util.Scanner;
 
 public class Kiosk {
-    //데이터 관리
-    //주석 꼭 붙여주세요
+
+
     private final List<MenuItem> menuItems;         // MenuItem으로부터 리스트를 가져온다.
 
     public Kiosk(List<MenuItem> menuItems) {        // MenuItem으로 받아온 리스트를 현재 kiosk클래스에서 사용할 수 있도록 선언
