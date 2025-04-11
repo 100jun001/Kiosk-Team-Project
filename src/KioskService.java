@@ -16,7 +16,7 @@ public class KioskService {
     }
 
     //
-    public void start() {
+    public static void start() {
         while (true) {
             // 1) 메인 메뉴 출력
             List<Menu> menus = mainMenu();
