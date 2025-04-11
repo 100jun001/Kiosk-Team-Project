@@ -6,6 +6,7 @@ public class KioskService {
     private final Scanner scanner;
     private final Kiosk kiosk;
     private final CartService cartService;
+    private Cart cart;
 
     // 외부로 부터받은 값을 내부로 저장시킨다.
     public KioskService(Scanner scanner, Kiosk kiosk, CartService cartService) {
@@ -42,12 +43,12 @@ public class KioskService {
                         throw new IllegalArgumentException("잘못된 입력입니다.");
                     }
                     // 메뉴를 주문하게되면 메뉴선택과 메뉴를 보여주게됨, break문을 통해 switch문 탈출
-                    SelectedMenu(menuSelect, menus);
+                    selectedMenu(menuSelect, menus);
                     break;
             }
         }
     }
-}
+
 
 // 리스트로부터 메뉴화면과 메뉴리스트를 가져오게되고, 선택된 메뉴를 메뉴로부터 가져와 선택된 메뉴의 이름을 나타나게 된다.
 private List<Menu> mainMenu() {
@@ -58,34 +59,25 @@ private List<Menu> mainMenu() {
     }
     System.out.println("0. 종료   | 종료");
 
-    // 만약 카트에 무언가 담겨있다면, 아래와 같은 주문 메뉴를 보여주게된다.
-    if (!cartService.checkEmpty()) {
-        System.out.println("[ ORDER MENU ]");
-        System.out.println("4. Orders       | 장바구니를 확인 후 주문합니다.");
-        System.out.println("5. Cancel       | 진행중인 주문을 취소합니다.");
-    }
     return menus;
 }
 
-// 주문에서 만약 카트가 비어있다면 아래의 문구를 보여지게 되면 다시 되돌아간다.
+
 private void order() {
-    if (cartService.checkEmpty()) {
-        System.out.println("장바구니에 담긴 메뉴가 없습니다.");
-        return;
-    }
+
     // 만약 장바구니안에 상품이 들어있다면, 주문화면에 상품을 보여주고 전체 금액을 보여준다.
     System.out.println("아래와 같이 주문 하시겠습니까?\n");
     System.out.println("[ Orders ]");
     cartService.displayCartItems();
     System.out.println("\n[ Total ]");
-    System.out.println("W " + cartService.getTotalPrice());
+    cartService.checkout();
 
     System.out.println("1. 주문        2. 메뉴판");
     int choice = scanner.nextInt(); // 1이나 2번을 선택하여 다음 화면으로 넘어간다.
     switch (choice) {
         case 1: // 주문 완료시 금액을 cartService로부터 전체 금액을 가져오게된다.
-            System.out.println("주문이 완료되었습니다. 금액은 W " + cartService.getTotalPrice() + " 입니다.\n");
-            cartService.clearCart(); // 장바구니 초기화
+            System.out.println("\n[ Total ]");
+            cartService.checkout();
             break;
         case 2:
             // 메뉴판으로 돌아간다.
@@ -94,19 +86,18 @@ private void order() {
             throw new IllegalArgumentException("잘못된 입력입니다.");
     }
 }
-
+    // 만약 장바구니가 비어있다면 아래문구를 보여준다.
 private void cancel() {
-    if (cartService.checkEmpty()) { // 만약 장바구니가 비어있다면 아래문구를 보여준다.
+    if (cart.clear()) {
         System.out.println("장바구니에 담긴 메뉴가 없습니다.");
         return;
-    } // 카트를 비우게되며 아래 문구를 보여준다.
-    cartService.clearCart();
-    System.out.println("진행중인 주문이 취소되었습니다.\n");
+    }
+
 }
 // 메뉴선택에서 사용자가 선택한 메뉴는 1번부터 시작되며, 메뉴가 선택되었을 경우에 메뉴아이템을 보여주게 된다.
 private void selectedMenu(int choice, List<Menu> menus) {
     Menu selectedMenu = menus.get(choice - 1);
-    List<MenuItem> menuItems = selectedMenu.getMenuItems();
+    List<MenuItem> menuItems = selectedMenu.getMenuItem();
 //선택된 메뉴는 수량과 메뉴의 이름과 금액 그리고 메뉴의 상세설명이 나타나게 된다.
     System.out.println("[ " + selectedMenu.getName() + " MENU ]");
     for (int i = 0; i < menuItems.size(); i++) {
@@ -135,16 +126,20 @@ private void selectedMenu(int choice, List<Menu> menus) {
     System.out.println("위 메뉴를 장바구니에 추가하시겠습니까?\n1. 확인        2. 취소");
 
     // 수량선택 창이 보여지게되고 장바구니에 삼품을 추가하게되면 선택된 상품의 이름과 함께 장바구니에 추가되었다는 문구가 입력된다.
-    int choice = scanner.nextInt();
+    choice = scanner.nextInt();
     switch (choice) {
         case 1:
-            cartService.addItem(selectedItem);
-            System.out.println(selectedItem.getName() + "이(가) 장바구니에 추가되었습니다.");
+            System.out.print("수량을 입력하세요: ");
+            int quantity = scanner.nextInt();
+            Product product = new Product(selectedItem.getName(), selectedItem.getPrice());
+            cartService.addProductToCart(product, quantity);
             break;
+
         case 2:
             // 취소하게된다.
             break;
         default: // 1과 2이외의 숫자를 입력하게 되면 아래와 같은 문구가 입력된다.
             throw new IllegalArgumentException("잘못된 입력입니다.");
     }
+}
 }

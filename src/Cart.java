@@ -16,8 +16,9 @@ import java.util.HashMap;
             return items;
         }
 
-        public void clear() {
+        public boolean clear() {
             items.clear();
+            return false;
         }
     }
 
