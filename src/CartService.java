@@ -1,39 +1,36 @@
-public class CartService {
-    private Cart cart;
+import java.util.Map;
 
-    // CartService 생성자에서 Cart 객체를 주입받음
+public class CartService {
+    private final Cart cart;
+
     public CartService(Cart cart) {
         this.cart = cart;
     }
 
-    // 장바구니에 상품을 추가하는 메서드
-    public void addProductToCart(Product product, int quantity) {
-        cart.addItem(product, quantity);
-        System.out.println(product.getName() + "이(가) " + quantity + "개 장바구니에 추가되었습니다.");
+    // 장바구니에 메뉴 추가
+    public void addProductToCart(MenuItem item, int quantity) {
+        cart.addMenuItem(item, quantity);
+        System.out.println(item.getName() + " " + quantity + "개 장바구니에 추가되었습니다.");
     }
 
-    // 장바구니에 담긴 상품 목록을 출력하는 메서드
+    // 장바구니 목록 출력
     public void displayCartItems() {
-        System.out.println("\n🛒 장바구니 목록:");
-        // 장바구니에 담긴 각 상품과 수량을 출력
-        for (Map.Entry<Product, Integer> entry : cart.getItems().entrySet()) {
-            Product product = entry.getKey();
+        Map<MenuItem, Integer> items = cart.getItems();
+        if (items.isEmpty()) {
+            System.out.println("장바구니가 비어있습니다.");
+            return;
+        }
+
+        for (Map.Entry<MenuItem, Integer> entry : items.entrySet()) {
+            MenuItem item = entry.getKey();
             int quantity = entry.getValue();
-            System.out.println("- " + product.getName() + " : " + quantity + "개");
+            System.out.println(item.getName() + " x " + quantity + "개 | W " + (item.getPrice() * quantity));
         }
     }
 
-    // 결제를 처리하고 총 금액을 출력하는 메서드
+    // 총 금액 출력
     public void checkout() {
-        displayCartItems(); // 장바구니 목록 출력
-        int total = 0;
-        // 총 금액 계산
-        for (Map.Entry<Product, Integer> entry : cart.getItems().entrySet()) {
-            Product product = entry.getKey();
-            int quantity = entry.getValue();
-            total += product.getPrice() * quantity;
-        }
-        System.out.println("총 결제 금액: " + total + "원");
-        cart.clear(); // 결제 후 장바구니 비우기
+        double totalPrice = cart.getTotalPrice();
+        System.out.println("총 금액: W " + totalPrice);
     }
 }

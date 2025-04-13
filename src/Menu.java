@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.util.List;
 
-public class Menu {
+public class    Menu {
     // 카테고리 이름 필드 추가
     // MenuItem 클래스를 List로 관리
     private final String name;

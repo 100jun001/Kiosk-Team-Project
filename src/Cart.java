@@ -2,28 +2,36 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Cart {
-    // 상품(Product)과 해당 수량(Integer)을 저장하는 HashMap
-    private Map<Product, Integer> items;
+    // MenuItem과 수량을 저장
+    private final Map<MenuItem, Integer> items = new HashMap<>();
 
-    public Cart() {
-        // HashMap을 사용하여 장바구니 초기화
-        items = new HashMap<>();
+    // 장바구니에 메뉴 추가
+    public void addMenuItem(MenuItem item, int quantity) {
+        items.put(item, items.getOrDefault(item, 0) + quantity);
     }
 
-    // 장바구니에 상품을 추가하는 메서드
-    public void addItem(Product product, int quantity) {
-        // 이미 장바구니에 있는 상품이면 수량을 증가시키고,
-        // 없으면 새로운 상품을 추가
-        items.put(product, items.getOrDefault(product, 0) + quantity);
+    // 장바구니 비우기 (비어있었으면 true)
+    public boolean clear() {
+        if (items.isEmpty()) {
+            return true;
+        }
+        items.clear();
+        return false;
     }
 
-    // 장바구니에 담긴 모든 상품과 수량을 반환하는 메서드
-    public Map<Product, Integer> getItems() {
+    // 장바구니 목록 반환
+    public Map<MenuItem, Integer> getItems() {
         return items;
     }
 
-    // 장바구니를 비우는 메서드
-    public void clear() {
-        items.clear();
+    // 총 가격 계산
+    public double getTotalPrice() {
+        double total = 0;
+        for (Map.Entry<MenuItem, Integer> entry : items.entrySet()) {
+            MenuItem item = entry.getKey();
+            int quantity = entry.getValue();
+            total += item.getPrice() * quantity;
+        }
+        return total;
     }
 }
