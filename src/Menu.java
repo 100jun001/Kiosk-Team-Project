@@ -9,7 +9,7 @@ public class Menu {
 
 
     // List에 포함된 MenuItem을 순차적으로 보여주는 함수
-    public Menu(String name, List<MenuItem> manuItem) {
+    public Menu(String name, List<MenuItem> menuItem) {
         this.name = name;
         this.menuItem = menuItem;
     }
