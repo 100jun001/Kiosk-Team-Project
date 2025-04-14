@@ -15,23 +15,6 @@ public class MenuItem {
     public double getPrice() {return price;}
     public String getDescription() {return description;}
 
-public class MenuItem {
-    // 이름, 가격, 설명 필드 선언하여 관리
-
-    private final String name;
-    private final double price;
-    private final String description;
-
-    public MenuItem(String name, double price, String description) {
-        this.name = name;
-        this.price = price;
-        this.description = description;
-    }
-
-    public String getName() {return name;}
-    public double getPrice() {return price;}
-    public String getDescription() {return description;}
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
