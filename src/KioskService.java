@@ -3,16 +3,17 @@ import java.util.Scanner;
 
 public class KioskService {
     // 다른 클래스에서 접근 하지 못하도록 캡슐화 진행
-    private final Scanner scanner;
-    private final Kiosk kiosk;
-    private final CartService cartService;
-    private Cart cart;
+    private static Scanner scanner;
+    private static Kiosk kiosk;
+    private static CartService cartService;
+    private static Cart cart;
 
     // 외부로 부터받은 값을 내부로 저장시킨다.
-    public KioskService(Scanner scanner, Kiosk kiosk, CartService cartService) {
+    public KioskService(Scanner scanner, Kiosk kiosk, CartService cartService, Cart cart) {
         this.scanner = scanner;
         this.kiosk = kiosk;
         this.cartService = cartService;
+        this.cart = cart;
     }
 
     //
@@ -51,7 +52,7 @@ public class KioskService {
 
 
     // 리스트로부터 메뉴화면과 메뉴리스트를 가져오게되고, 선택된 메뉴를 메뉴로부터 가져와 선택된 메뉴의 이름을 나타나게 된다.
-    private List<Menu> mainMenu() {
+    private static List<Menu> mainMenu() {
         System.out.println("[ MAIN MENU ]");
         List<Menu> menus = kiosk.getMenus();
         for (int i = 0; i < menus.size(); i++) {
@@ -63,7 +64,7 @@ public class KioskService {
     }
 
 
-    private void order() {
+    private static void order() {
 
         // 만약 장바구니안에 상품이 들어있다면, 주문화면에 상품을 보여주고 전체 금액을 보여준다.
         System.out.println("아래와 같이 주문 하시겠습니까?\n");
@@ -87,15 +88,14 @@ public class KioskService {
         }
     }
     // 만약 장바구니가 비어있다면 아래문구를 보여준다.
-    private void cancel() {
+    private static void cancel() {
         if (cart.clear()) {
             System.out.println("장바구니에 담긴 메뉴가 없습니다.");
-            return;
         }
 
     }
     // 메뉴선택에서 사용자가 선택한 메뉴는 1번부터 시작되며, 메뉴가 선택되었을 경우에 메뉴아이템을 보여주게 된다.
-    private void selectedMenu(int choice, List<Menu> menus) {
+    private static void selectedMenu(int choice, List<Menu> menus) {
         Menu selectedMenu = menus.get(choice - 1);
         List<MenuItem> menuItems = selectedMenu.getMenuItem();
 //선택된 메뉴는 수량과 메뉴의 이름과 금액 그리고 메뉴의 상세설명이 나타나게 된다.
@@ -131,8 +131,7 @@ public class KioskService {
             case 1:
                 System.out.print("수량을 입력하세요: ");
                 int quantity = scanner.nextInt();
-                Product product = new Product(selectedItem.getName(), selectedItem.getPrice());
-                cartService.addProductToCart(product, quantity);
+                cartService.addProductToCart(selectedItem, quantity);
                 break;
 
             case 2:
@@ -142,4 +141,5 @@ public class KioskService {
                 throw new IllegalArgumentException("잘못된 입력입니다.");
         }
     }
+
 }

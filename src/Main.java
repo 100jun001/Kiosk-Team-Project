@@ -39,7 +39,7 @@ public class Main {
         Kiosk kiosk = new Kiosk(List.of(burger, side, drink));
 
         CartService cartService = new CartService(cart);
-        KioskService kioskService = new KioskService(sc, kiosk, cartService);
+        KioskService kioskService = new KioskService(sc, kiosk, cartService, cart);
 
 
 
