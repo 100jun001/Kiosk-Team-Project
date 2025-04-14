@@ -33,22 +33,3 @@ public class MenuItem {
 // 구조에 맞게 함수를 선언해놓고 가져다 사용하세요.
 
 //주석 꼭 붙여 주세요
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof MenuItem)) return false;
-        MenuItem that = (MenuItem) o;
-        return name.equals(that.name) && price == that.price;
-    }
-
-    @Override
-    public int hashCode() {
-        return name.hashCode();
-    }
-
-}
-
-// 구조에 맞게 함수를 선언해놓고 가져다 사용하세요.
-
-//주석 꼭 붙여 주세요
